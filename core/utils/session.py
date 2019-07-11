@@ -3,9 +3,7 @@ from contextlib import contextmanager
 import sqlalchemy
 from sqlalchemy.orm import sessionmaker
 
-from ..config import psgres_url
-
-from requests import exceptions
+from core.config import psgres_url
 
 engine = sqlalchemy.create_engine(psgres_url())
 Session = sessionmaker(bind=engine)
@@ -21,8 +19,19 @@ def session(auto_commit=True):
     except Exception as err:
         session.rollback()
         raise err
-    except exceptions.RequestException as e:
-        session.rollback()
-        raise e
     finally:
         session.close()
+'''
+def dbconnect(func):
+    def inner(*args, **kwargs):
+        session = Session()  # with all the requirements
+        try:
+            func(*args, session=session, **kwargs)
+            session.commit()
+        except:
+            session.rollback()
+            raise
+        finally:
+            session.close()
+    return inner
+'''

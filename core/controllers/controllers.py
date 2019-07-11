@@ -2,8 +2,8 @@ from core.config import bcrypt
 
 
 def set_password(password, user):
-    user.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
-    return user.password_hash
+    user.hash_password = bcrypt.generate_password_hash(password).decode('utf-8')
+    return user.hash_password
 
 
 def check_password(hash_password, password):
