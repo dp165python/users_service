@@ -1,13 +1,13 @@
-from core.config import bcrypt
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 def set_password(password, user):
-    user.hash_password = bcrypt.generate_password_hash(password).decode('utf-8')
+    user.hash_password = generate_password_hash(password)
     return user.hash_password
 
 
 def check_password(hash_password, password):
-    return bcrypt.check_password_hash(hash_password, password)
+    return check_password_hash(hash_password, password)
 
 
 def answer_resource_methods(data):
