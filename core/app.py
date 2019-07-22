@@ -1,11 +1,10 @@
-# from core.api import usr_api, bp
-from core.resources.resources import UsersResourceCreate, UsersResourceChange, UsersResourceAuth
+from flask import Flask, g
+from flask_restful import Api
+from sqlalchemy.orm import sessionmaker
 
 from core.config import runtime_config
-from flask_restful import Api
-from flask import Flask, g
-from sqlalchemy.orm import sessionmaker
 from core.connector import get_connection
+from core.resources.resources import UsersResourceCreate, UsersResourceChange, UsersResourceAuth
 from core.utils.response import MyResponse
 
 app = Flask(__name__)
@@ -34,8 +33,6 @@ def close_session(e):
 
 
 api = Api(app, prefix='/users')
-
-#app.register_blueprint(bp, url_prefix='/users')
 
 api.add_resource(UsersResourceCreate, '/api/users')
 api.add_resource(UsersResourceChange, '/api/<id>')

@@ -20,10 +20,10 @@ class UsersData:
     def answer_resource_methods(self):
         return {
             'id': str(self._user.id),
-            'username': str(self._user.username),
+            'username': self._user.username,
             'email': self._user.email,
             'user_address': self._user.user_address,
-            'create_user_date': str(self._user.create_user_date)
+            'create_user_date': self._user.create_user_date
         }
 
 
@@ -49,25 +49,16 @@ class UsersController:
 
     def put_user(self, id, data, errors):
         user = g.session.query(Users).filter(Users.id == id).first()
-        print("User id MY", user)
         if not user:
             abort(404, 'No user with that id')
 
         if errors:
             abort(404, f'Invalid data{errors}')
 
-        username = data["username"]
-        email = data["email"]
-        user_address = data["user_address"]
-        password = set_password(data["password"], Users)
-
-        user = g.session.query(Users).filter(Users.id == id).first()
-        if not user:
-            abort(404, 'User with this id does not exist')
-        user.username = username
-        user.email = email
-        user.user_address = user_address
-        user.password = password
+        user.username = data["username"]
+        user.email = data["email"]
+        user.user_address = data["user_address"]
+        user.password = set_password(data["password"], Users)
         return user
 
     def patch_user(self, id, data, errors):

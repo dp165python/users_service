@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.pool import QueuePool, NullPool
 from sqlalchemy_utils import database_exists
+
 from core.models.models import Base
 
 engine_lock = Lock()
@@ -23,9 +24,7 @@ def get_db_uri(user=None, password=None, host=None, port=None, db_name=None):
 
 def get_engine(uri):
     global engine
-
     with engine_lock:
-
         if not engine:
             engine = create_engine(uri, poolclass=QueuePool)
         try:
@@ -58,7 +57,7 @@ def drop_database(db_name: str = None):
     default_engine = create_engine(
         get_db_uri(db_name=current_app.config['DEFAULT_DB']), poolclass=NullPool, isolation_level='AUTOCOMMIT'
     )
-    db_name = db_name or current_app.config['   DB_NAME']
+    db_name = db_name or current_app.config['DB_NAME']
 
     if database_exists(default_engine.url):
         default_engine.execute(f'drop database {db_name}')

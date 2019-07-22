@@ -1,17 +1,12 @@
-#from flask_migrate import Migrate
-#from flask_sqlalchemy import SQLAlchemy
-import os
 import logging
+import os
 
 from core.constants import APP_ENV_DEV, APP_ENV_PROD, APP_ENV_TEST
-
-#db = SQLAlchemy()
-#migrate = Migrate()
 
 
 class Config:
     DB_USER = os.environ.get('DB_USER', 'postgres')
-    DB_PASSWORD = os.environ.get('DB_PASSWORD', '12345678')
+    DB_PASSWORD = os.environ.get('DB_PASSWORD', '11111111')
     DEFAULT_DB = os.environ.get('DEFAULT_DB', 'postgres')
     DB_HOST = os.environ.get('DB_HOST', 'localhost')
     DB_PORT = os.environ.get('DB_PORT', 5432)

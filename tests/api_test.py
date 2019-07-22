@@ -2,28 +2,41 @@ import unittest
 from core.app import app
 from tests.data_for_test import data_all_users, test_data_post
 import json
-from core.config import db, runtime_config, TestConfig
-from core.constants import APP_ENV_TEST
-import os
+from core.config import TestConfig
+from core.connector import create_database, drop_database, create_engine
+#from tests.fixtures import sample
+#from flask_fixtures import FixturesMixin
 
-# тестовая бд
-#TEST_DB = 'postgresql://postgres:11111111@localhost:5432/test_users'
+'''
+FixturesMixin.init_app(app, db)
+fixtures = 'users_test_data.json'
+'''
 
 class BaseDatabaseTest(unittest.TestCase):
+    def create_app(self):
+        app.config.from_object(TestConfig)
+        return app
+
     def setUp(self):
         #env = os.environ.get("test", APP_ENV_TEST)
+        #fixtures = os.path.join(BASE_DIR, 'users_test_data.json')
         app.config.from_object(TestConfig)
-
         self.app = app.test_client()
+
         with app.app_context():
+            db = create_engine('postgresql://postgres:11111111@localhost:5432/test_users').connect()
+            create_database('test_users')
+
             #db.drop_all()
-            db.create_all()
-            #create_database('test_users')
+            #db.create_all()
 
 
     def tearDown(self):
-        db.session.remove()
-        db.drop_all()
+        pass
+        #with app.app_context():
+        #drop_database('test_users')
+        #db.session.remove()
+        #db.drop_all()
 
 '''
 class FlaskTestApi(BaseDatabaseTest):
@@ -56,7 +69,7 @@ class FlaskTestApi(BaseDatabaseTest):
 class TestUsersPost(BaseDatabaseTest):
     def test_post_user(self):
         #user = self.app.post('/users/api/users', data=json.dumps(self.test_data), content_type='application/json')
-        with self.client:
+        #with self.client:
             user = self.app.post('/users/api/users', json=test_data_post)
             self.assertEqual(user.status_code, 201)
             self.assertEqual(user.content_type, 'application/json')

@@ -1,10 +1,10 @@
 from flask import request, g, abort
 from flask_restful import Resource
 
-from core.models.schema import user_schema, user_schema_put, user_schema_patch, user_schema_auth
-from core.controllers.controllers import UsersData
 from core.controllers.controllers import UsersController
+from core.controllers.controllers import UsersData
 from core.models.models import Users
+from core.models.schema import user_schema, user_schema_put, user_schema_patch, user_schema_auth
 
 
 class UsersResourceCreate(Resource):
@@ -23,10 +23,6 @@ class UsersResourceCreate(Resource):
 class UsersResourceChange(Resource):
     def put(self, id):
         data = request.get_json() or {}
-        user = g.session.query(Users).filter(Users.id == id).first()
-        print("User id MY", user)
-        if not user:
-            abort(404, 'No user with that id')
         result, errors = user_schema_put.load(data)
         user_check_put = UsersController().put_user(id, result, errors)
         return UsersData(user_check_put).answer_resource_methods(), 200
