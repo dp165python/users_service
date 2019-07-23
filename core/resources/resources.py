@@ -1,4 +1,4 @@
-from flask import request, g, abort
+from flask import request, g
 from flask_restful import Resource
 
 from core.controllers.controllers import UsersController

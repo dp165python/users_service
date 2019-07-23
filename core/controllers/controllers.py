@@ -2,6 +2,7 @@ from flask import abort, g
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from core.models.models import Users
+from sqlalchemy.dialects.postgresql import UUID
 
 
 def set_password(password, user):
@@ -19,11 +20,11 @@ class UsersData:
 
     def answer_resource_methods(self):
         return {
-            'id': str(self._user.id),
+            'user_id': str(self._user.id),
             'username': self._user.username,
             'email': self._user.email,
             'user_address': self._user.user_address,
-            'create_user_date': self._user.create_user_date
+            'create_user_date': str(self._user.create_user_date)
         }
 
 
@@ -48,7 +49,7 @@ class UsersController:
         return username
 
     def put_user(self, id, data, errors):
-        user = g.session.query(Users).filter(Users.id == id).first()
+        user = g.session.query(Users).filter(UUID(Users.id) == id).first()
         if not user:
             abort(404, 'No user with that id')
 
@@ -62,9 +63,9 @@ class UsersController:
         return user
 
     def patch_user(self, id, data, errors):
-        user = g.session.query(Users).filter(Users.id == id).first()
+        user = g.session.query(Users).filter(UUID(Users.id) == id).first()
         if not user:
-            abort(404, 'No user with that name')
+            abort(404, 'No user with that id')
         if errors:
             abort(404, f'Invalid data{errors}')
 
@@ -79,7 +80,7 @@ class UsersController:
         return user
 
     def get_user(self, id):
-        user = g.session.query(Users).filter(Users.id == id).first()
+        user = g.session.query(Users).filter(UUID(Users.id) == id).first()
         if not user:
             abort(404, 'No user with that id')
         return user
@@ -91,7 +92,7 @@ class UsersController:
         username = data['username']
         user = g.session.query(Users).filter(Users.username == username).first()
         if not user:
-            abort(404, 'No user with that id')
+            abort(404, 'No user with that user')
 
         password = check_password(user.password, data['password'])
         if username != user.username or password is False:
