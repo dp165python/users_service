@@ -5,6 +5,7 @@ from core.controllers.controllers import UsersController
 from core.controllers.controllers import UsersData
 from core.models.models import Users
 from core.models.schema import user_schema, user_schema_put, user_schema_patch, user_schema_auth
+from core.resources.base_resourse import BaseResource
 
 
 class UsersResourceCreate(Resource):
@@ -20,7 +21,7 @@ class UsersResourceCreate(Resource):
         return UsersData(controll_check).answer_resource_methods(), 201
 
 
-class UsersResourceChange(Resource):
+class UsersResourceChange(BaseResource):
     def put(self, id):
         data = request.get_json() or {}
         result, errors = user_schema_put.load(data)
@@ -38,7 +39,7 @@ class UsersResourceChange(Resource):
         return UsersData(user).answer_resource_methods(), 200
 
 
-class UsersResourceAuth(Resource):
+class UsersResourceAuth(BaseResource):
     def post(self):
         data = request.get_json() or {}
         result, errors = user_schema_auth.load(data)

@@ -49,7 +49,7 @@ class UsersController:
         return username
 
     def put_user(self, id, data, errors):
-        user = g.session.query(Users).filter(UUID(Users.id) == id).first()
+        user = g.session.query(Users).filter(Users.id == id).first()
         if not user:
             abort(404, 'No user with that id')
 
@@ -59,13 +59,14 @@ class UsersController:
         user.username = data["username"]
         user.email = data["email"]
         user.user_address = data["user_address"]
-        user.password = set_password(data["password"], Users)
+        user.password = set_password(data["password"], user)
         return user
 
     def patch_user(self, id, data, errors):
-        user = g.session.query(Users).filter(UUID(Users.id) == id).first()
+        user = g.session.query(Users).filter(Users.id == id).first()
         if not user:
             abort(404, 'No user with that id')
+
         if errors:
             abort(404, f'Invalid data{errors}')
 
@@ -80,7 +81,7 @@ class UsersController:
         return user
 
     def get_user(self, id):
-        user = g.session.query(Users).filter(UUID(Users.id) == id).first()
+        user = g.session.query(Users).filter(Users.id == id).first()
         if not user:
             abort(404, 'No user with that id')
         return user
