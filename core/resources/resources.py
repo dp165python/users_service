@@ -39,7 +39,7 @@ class UsersResourceChange(BaseResource):
         return UsersData(user).answer_resource_methods(), 200
 
 
-class UsersResourceAuth(BaseResource):
+class UsersResourceAuth(Resource):
     def post(self):
         data = request.get_json() or {}
         result, errors = user_schema_auth.load(data)
