@@ -1,6 +1,6 @@
+# http POST http://localhost:5000/users/api/users username=alice password=1 email=alice@example.com user_address=Pushkina,27
 # http GET http://localhost:5000/users/api/id
 # http GET http://localhost:5000/users/api/users
-# http POST http://localhost:5000/users/api/users username=alice password=7 email=alice@example.com user_address=Pushkina,27
-# http PUT http://localhost:5000/users/api/id email=alice@example.com username=alice password_hash=1 user_address=Kirova,27
+# http PUT http://localhost:5000/users/api/id email=zina@example.com username=zina password=1 user_address=Lenina,1
 # http PATCH http://localhost:5000/users/api/id email=zina@example.com
-# http POST http://localhost:5000/users/api/authentication username=alice password=1
+# http POST http://localhost:5000/users/api/authentication username=zina password=1
